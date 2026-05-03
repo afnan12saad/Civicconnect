@@ -3,18 +3,62 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Sparkles, Route, TriangleAlert, MapPin, Image as ImageIcon, Check, Mic, MicOff } from 'lucide-react';
+import { Sparkles, Route, TriangleAlert, MapPin, Image as ImageIcon, Check, Mic, MicOff, ShieldCheck, Box, Upload, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/src/components/Layout';
 import { useLanguage } from '../LanguageContext';
+import { useNotifications } from '../NotificationContext';
 
 export default function ReportForm() {
   const { t, language } = useLanguage();
+  const { addNotification } = useNotifications();
   const [description, setDescription] = useState("There's a large pothole on Oak Street near the primary school. It's causing cars to swerve and seems quite deep.");
   const [isListening, setIsListening] = useState(false);
   const [micError, setMicError] = useState(false);
+  const [isTokenAcquired, setIsTokenAcquired] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [reportImage, setReportImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const recognitionRef = useRef<any>(null);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setReportImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAcquireToken = async () => {
+    setIsTokenAcquired(true);
+    addNotification({
+      title: t('token_acquired' as any),
+      message: 'CIVIC_TOKEN_018274 has been successfully minted for this report.',
+      type: 'success'
+    });
+  };
+
+  const handleSaveToLedger = async () => {
+    if (!isTokenAcquired) return;
+    
+    setIsSaving(true);
+    // Simulate ledger delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    setIsSaving(false);
+    setIsSubmitted(true);
+    
+    addNotification({
+      title: t('report_submitted' as any),
+      message: t('report_message' as any),
+      type: 'success'
+    });
+  };
 
   useEffect(() => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -131,6 +175,37 @@ export default function ReportForm() {
       }
     }
   };
+  if (isSubmitted) {
+    return (
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col items-center justify-center py-20 text-center space-y-8"
+      >
+        <div className="w-24 h-24 border border-emerald-500/20 rounded-full flex items-center justify-center bg-emerald-500/5 relative">
+          <ShieldCheck className="w-10 h-10 text-emerald-500" />
+          <div className="absolute inset-0 border border-emerald-500/40 rounded-full animate-ping opacity-20" />
+        </div>
+        <div className="space-y-3">
+          <h2 className="text-3xl font-serif text-white tracking-tight">{t('report_submitted' as any)}</h2>
+          <p className="text-[10px] uppercase font-bold text-white/40 tracking-[0.2em]">{t('report_message' as any)}</p>
+        </div>
+        <div className="pt-8 grid grid-cols-1 gap-4 w-full max-w-xs">
+          <div className="p-4 bg-white/[0.02] border border-white/5 rounded-sm flex flex-col items-start gap-2">
+            <span className="text-[8px] font-bold text-white/20 uppercase tracking-widest">Transaction Hash</span>
+            <span className="text-[10px] font-mono text-emerald-500/80 break-all">0x71C7656EC7ab88b098defB751B7401B5f6d8976F</span>
+          </div>
+          <button 
+            onClick={() => window.location.reload()}
+            className="w-full bg-white text-black py-4 rounded-sm font-bold text-[10px] uppercase tracking-[0.3em]"
+          >
+            Terminal Home
+          </button>
+        </div>
+      </motion.div>
+    );
+  }
+
   return (
     <motion.div 
       initial={{ opacity: 0, scale: 0.95 }}
@@ -278,27 +353,102 @@ export default function ReportForm() {
       </div>
 
       {/* Visual Context */}
-      <div className="group relative h-64 rounded-sm overflow-hidden border border-white/10 shadow-2xl">
-        <img 
-          src="https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?q=80&w=2070&auto=format&fit=crop" 
-          alt="Pothole Close-up" 
-          className="w-full h-full object-cover grayscale opacity-40 transition-all duration-1000 group-hover:scale-105 group-hover:opacity-60"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent" />
-        <div className="absolute bottom-8 left-8 bg-surface/80 backdrop-blur-md px-4 py-2 border border-white/10 rounded-full flex items-center gap-3 shadow-2xl">
-          <ImageIcon className="w-4 h-4 text-white/40" />
-          <span className="text-[10px] font-bold text-white/80 uppercase tracking-widest">Metadata: Pothole_Capture_01.jpg</span>
-          <div className="w-1 h-1 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+      <div className="space-y-4">
+        <label className="text-[10px] uppercase font-bold text-white/30 tracking-[0.2em] px-1">Visual Evidence</label>
+        <div className="group relative h-64 rounded-sm overflow-hidden border border-white/10 shadow-2xl bg-surface-container flex items-center justify-center">
+          {reportImage ? (
+            <>
+              <img 
+                src={reportImage} 
+                alt="Report Evidence" 
+                className="w-full h-full object-cover grayscale opacity-60 transition-all duration-700 group-hover:scale-105 group-hover:opacity-80"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
+                <div className="bg-surface/80 backdrop-blur-md px-4 py-2 border border-white/10 rounded-full flex items-center gap-3 shadow-2xl">
+                  <ImageIcon className="w-3 h-3 text-white/40" />
+                  <span className="text-[9px] font-bold text-white/80 uppercase tracking-widest">Metadata: Evidence_Log.png</span>
+                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+                </div>
+                <button 
+                  onClick={() => setReportImage(null)}
+                  className="p-3 bg-error/20 border border-error/40 rounded-full text-error hover:bg-error transition-all"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </>
+          ) : (
+            <button 
+              onClick={() => fileInputRef.current?.click()}
+              className="flex flex-col items-center gap-6 group/btn"
+            >
+              <div className="w-20 h-20 border border-white/10 rounded-full flex items-center justify-center bg-white/5 group-hover/btn:bg-white/10 group-hover/btn:border-white/20 transition-all">
+                <Upload className="w-6 h-6 text-white/20 group-hover/btn:text-white/60 transition-all" />
+              </div>
+              <div className="text-center space-y-2">
+                <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em] block">Select Optical Capture</span>
+                <span className="text-[8px] font-bold text-white/10 uppercase tracking-widest block">Supports PNG, JPG, RAW</span>
+              </div>
+            </button>
+          )}
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            onChange={handleImageChange} 
+            accept="image/*" 
+            className="hidden" 
+          />
         </div>
       </div>
 
       {/* Buttons */}
       <div className="pt-8 flex flex-col gap-4">
-        <button className="w-full bg-white text-black py-5 rounded-sm font-bold text-[11px] uppercase tracking-[0.3em] shadow-2xl hover:bg-white/90 active:scale-[0.98] transition-all">
-          Acquire Asset Token
+        <button 
+          onClick={handleAcquireToken}
+          disabled={isTokenAcquired}
+          className={cn(
+            "w-full py-5 rounded-sm font-bold text-[11px] uppercase tracking-[0.3em] shadow-2xl active:scale-[0.98] transition-all flex items-center justify-center gap-3",
+            isTokenAcquired 
+              ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20" 
+              : "bg-white text-black hover:bg-white/90"
+          )}
+        >
+          {isTokenAcquired ? (
+            <>
+              <Check className="w-4 h-4" />
+              {t('token_acquired' as any)}
+            </>
+          ) : (
+            <>
+              <Box className="w-4 h-4" />
+              {t('acquire_token' as any)}
+            </>
+          )}
         </button>
-        <button className="w-full bg-transparent text-white/40 border border-white/10 py-5 rounded-sm font-bold text-[11px] uppercase tracking-[0.3em] hover:text-white hover:bg-white/5 active:scale-[0.98] transition-all">
-          Save to Ledger
+        <button 
+          onClick={handleSaveToLedger}
+          disabled={!isTokenAcquired || isSaving}
+          className={cn(
+            "w-full border py-5 rounded-sm font-bold text-[11px] uppercase tracking-[0.3em] active:scale-[0.98] transition-all flex items-center justify-center gap-3",
+            !isTokenAcquired 
+              ? "bg-transparent text-white/10 border-white/5 cursor-not-allowed" 
+              : isSaving
+                ? "bg-white/10 text-white border-white/20"
+                : "bg-transparent text-white/40 border-white/10 hover:text-white hover:bg-white/5"
+          )}
+        >
+          {isSaving ? (
+            <>
+              <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+              {t('saving' as any)}
+            </>
+          ) : (
+            <>
+              <ShieldCheck className="w-4 h-4" />
+              {t('save_ledger' as any)}
+            </>
+          )}
         </button>
       </div>
     </motion.div>

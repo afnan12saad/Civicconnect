@@ -14,6 +14,7 @@ import Profile from '@/src/pages/Profile';
 import Auth from '@/src/pages/Auth';
 
 import { LanguageProvider } from './LanguageContext';
+import { NotificationProvider } from './NotificationContext';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -37,7 +38,8 @@ export default function App() {
 
   return (
     <LanguageProvider>
-      <BrowserRouter>
+      <NotificationProvider>
+        <BrowserRouter>
       <Routes>
         <Route 
           path="/auth" 
@@ -55,6 +57,7 @@ export default function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+    </NotificationProvider>
     </LanguageProvider>
   );
 }

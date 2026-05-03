@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Mail, Lock, User, ArrowRight, ShieldCheck, Sparkles, AlertCircle, Languages } from 'lucide-react';
 import { cn } from '@/src/components/Layout';
@@ -48,6 +48,13 @@ export default function Auth({ onLogin }: { onLogin: () => void }) {
       alert("Recovery protocol initiated. Check your civic link.");
       setMode('login');
     } else {
+      localStorage.setItem('civic_user_email', email);
+      if (mode === 'signup' && name) {
+        localStorage.setItem('civic_user_name', name);
+      } else if (mode === 'login' && !localStorage.getItem('civic_user_name')) {
+        // Fallback name if logging in without prior signup in this session
+        localStorage.setItem('civic_user_name', email.split('@')[0]);
+      }
       onLogin();
     }
     setLoading(false);
