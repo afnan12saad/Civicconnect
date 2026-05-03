@@ -45,36 +45,36 @@ export default function Dashboard() {
     >
       {/* Header */}
       <section className="space-y-2">
-        <h2 className="text-5xl font-serif tracking-tight text-white/90">{t('dashboard')}</h2>
-        <p className="text-[10px] uppercase tracking-[0.4em] text-white/40 font-bold">{t('analytics')}</p>
+        <h2 className="text-5xl font-serif tracking-tight text-on-surface/90">{t('dashboard')}</h2>
+        <p className="text-[10px] uppercase tracking-[0.4em] text-on-surface/40 font-bold">{t('analytics')}</p>
       </section>
 
       {/* Metrics Bento Grid */}
       <section className="grid grid-cols-2 gap-6">
-        <div className="col-span-2 bg-gradient-to-br from-surface-container-high to-surface border border-white/10 p-8 rounded-sm relative overflow-hidden h-44 flex flex-col justify-between shadow-2xl">
+        <div className="col-span-2 bg-gradient-to-br from-surface-container-high to-surface border border-on-surface/10 p-8 rounded-sm relative overflow-hidden h-44 flex flex-col justify-between shadow-2xl">
           <div>
-            <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.3em]">{t('active_tickets')}</span>
-            <p className="text-6xl font-serif text-white mt-4">1,284</p>
+            <span className="text-[10px] font-bold text-on-surface/40 uppercase tracking-[0.3em]">{t('active_tickets')}</span>
+            <p className="text-6xl font-serif text-on-surface mt-4">1,284</p>
           </div>
           <div className="flex items-center gap-3 text-green-500">
             <TrendingDown className="w-4 h-4" />
             <span className="text-[10px] font-bold uppercase tracking-widest">4.2% yield from last week</span>
           </div>
-          <TrendingDown className="absolute -right-8 -bottom-8 w-40 h-40 opacity-5 text-white rotate-12" />
+          <TrendingDown className="absolute -right-8 -bottom-8 w-40 h-40 opacity-5 text-on-surface rotate-12" />
         </div>
 
-        <div className="bg-surface-container border border-white/5 p-6 rounded-sm space-y-4">
-          <span className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">Avg. Resolution</span>
-          <p className="text-3xl font-serif text-white">3.4d</p>
-          <div className="h-0.5 bg-white/5 overflow-hidden">
-            <div className="h-full bg-white/40 w-3/4" />
+        <div className="bg-surface-container border border-on-surface/5 p-6 rounded-sm space-y-4">
+          <span className="text-[10px] font-bold text-on-surface/30 uppercase tracking-[0.2em]">Avg. Resolution</span>
+          <p className="text-3xl font-serif text-on-surface">3.4d</p>
+          <div className="h-0.5 bg-on-surface/5 overflow-hidden">
+            <div className="h-full bg-on-surface/40 w-3/4" />
           </div>
         </div>
 
-        <div className="bg-surface-container border border-white/5 p-6 rounded-sm space-y-4">
-          <span className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">Citizen Rating</span>
-          <p className="text-3xl font-serif text-white">4.8/5</p>
-          <div className="flex gap-1 text-white/80">
+        <div className="bg-surface-container border border-on-surface/5 p-6 rounded-sm space-y-4">
+          <span className="text-[10px] font-bold text-on-surface/30 uppercase tracking-[0.2em]">Citizen Rating</span>
+          <p className="text-3xl font-serif text-on-surface">4.8/5</p>
+          <div className="flex gap-1 text-on-surface/80">
             {[1, 2, 3, 4, 5].map((i) => <Star key={i} className={cn("w-3.5 h-3.5", i === 5 ? "opacity-20" : "fill-current")} />)}
           </div>
         </div>
@@ -83,10 +83,10 @@ export default function Dashboard() {
       {/* Density Map Section */}
       <section className="space-y-6">
         <div className="flex justify-between items-end">
-          <h2 className="font-serif text-xl text-white/80">{t('map_view')}</h2>
-          <MapIcon className="w-5 h-5 text-white/20" />
+          <h2 className="font-serif text-xl text-on-surface/80">{t('map_view')}</h2>
+          <MapIcon className="w-5 h-5 text-on-surface/20" />
         </div>
-        <div className="h-64 relative rounded-sm overflow-hidden border border-white/10 bg-surface-container-high shadow-2xl group">
+        <div className="h-64 relative rounded-sm overflow-hidden border border-on-surface/10 bg-surface-container-high shadow-2xl group">
           <img 
             src="https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=2070&auto=format&fit=crop" 
             alt="Exact Shivamogga Satellite Map" 
@@ -105,14 +105,14 @@ export default function Dashboard() {
              <div className="absolute top-1/2 right-[15%] w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.8)]" />
              
              {/* Low Density */}
-             <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 rounded-full bg-white/40 shadow-[0_0_10px_white/20]" />
-             <div className="absolute bottom-1/4 left-1/4 w-1.5 h-1.5 rounded-full bg-white/40 shadow-[0_0_10px_white/20]" />
+             <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 rounded-full bg-on-surface/40 shadow-[0_0_10px_on-surface/20]" />
+             <div className="absolute bottom-1/4 left-1/4 w-1.5 h-1.5 rounded-full bg-on-surface/40 shadow-[0_0_10px_on-surface/20]" />
           </div>
           
           <div className="absolute bottom-6 left-6 flex flex-wrap gap-3">
             <Legend badgeColor="bg-error shadow-[0_0_10px_rgba(255,77,77,0.5)]" label="Critical Density" />
             <Legend badgeColor="bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]" label="Moderate Flow" />
-            <Legend badgeColor="bg-white/20" label="Sparse Activity" />
+            <Legend badgeColor="bg-on-surface/20" label="Sparse Activity" />
           </div>
         </div>
       </section>

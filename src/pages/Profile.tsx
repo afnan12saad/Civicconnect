@@ -3,19 +3,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Edit2, Verified, FileText, CheckCircle, User, BellRing, ShieldCheck, HelpCircle, LogOut, ChevronRight, Camera, Mail, Phone, UserCircle, Calendar, Languages } from 'lucide-react';
+import { Edit2, Verified, FileText, CheckCircle, User, BellRing, ShieldCheck, HelpCircle, LogOut, ChevronRight, Camera, Mail, Phone, UserCircle, Calendar, Languages, Palette, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/src/components/Layout';
 import { useLanguage } from '../LanguageContext';
 import { Language } from '../translations';
 import { useNotifications } from '../NotificationContext';
+import { useTheme } from '../ThemeContext';
 
 export default function Profile({ onLogout }: { onLogout: () => void }) {
   const { language, setLanguage, t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
   const { addNotification } = useNotifications();
   const [showIdentity, setShowIdentity] = useState(false);
   const [showLanguages, setShowLanguages] = useState(false);
+  const [showTheme, setShowTheme] = useState(false);
   const [profilePic, setProfilePic] = useState<string | null>("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop");
 
   const [userName, setUserName] = useState("Alex Rivera");
@@ -75,15 +78,15 @@ export default function Profile({ onLogout }: { onLogout: () => void }) {
       className="space-y-12 pb-12"
     >
       {/* Profile Header */}
-      <section className="bg-surface-container border border-white/5 p-12 rounded-sm flex flex-col items-center gap-8 shadow-2xl relative overflow-hidden">
+      <section className="bg-surface-container border border-on-surface/5 p-12 rounded-sm flex flex-col items-center gap-8 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 p-8">
-          <div className="px-4 py-1.5 border border-white/20 rounded-full text-[10px] uppercase tracking-widest text-white/40">
+          <div className="px-4 py-1.5 border border-on-surface/20 rounded-full text-[10px] uppercase tracking-widest text-on-surface/40">
             Rank: Gold
           </div>
         </div>
 
         <div className="relative group">
-          <div className="w-40 h-40 rounded-full border border-white/10 overflow-hidden shadow-2xl ring-1 ring-white/20 bg-black/40 flex items-center justify-center">
+          <div className="w-40 h-40 rounded-full border border-on-surface/10 overflow-hidden shadow-2xl ring-1 ring-on-surface/20 bg-black/40 flex items-center justify-center">
             {profilePic ? (
               <img 
                 src={profilePic} 
@@ -91,10 +94,10 @@ export default function Profile({ onLogout }: { onLogout: () => void }) {
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
               />
             ) : (
-              <UserCircle className="w-20 h-20 text-white/10 group-hover:text-white/40 transition-all" />
+              <UserCircle className="w-20 h-20 text-on-surface/10 group-hover:text-on-surface/40 transition-all" />
             )}
           </div>
-          <label className="absolute bottom-2 right-2 bg-white text-black p-3 rounded-full border-4 border-surface shadow-2xl hover:scale-110 active:scale-95 transition-all cursor-pointer">
+          <label className="absolute bottom-2 right-2 bg-on-surface text-surface p-3 rounded-full border-4 border-surface shadow-2xl hover:scale-110 active:scale-95 transition-all cursor-pointer">
             <Camera className="w-4 h-4" />
             <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
           </label>
@@ -109,7 +112,7 @@ export default function Profile({ onLogout }: { onLogout: () => void }) {
                 onChange={(e) => setUserName(e.target.value)}
                 onBlur={() => setIsEditingName(false)}
                 onKeyDown={(e) => e.key === 'Enter' && setIsEditingName(false)}
-                className="bg-black/40 border border-white/20 rounded-sm text-3xl font-serif text-white tracking-tight px-6 py-2 focus:border-white/40 outline-none text-center"
+                className="bg-on-surface/5 border border-on-surface/20 rounded-sm text-3xl font-serif text-on-surface tracking-tight px-6 py-2 focus:border-on-surface/40 outline-none text-center"
                 autoFocus
               />
               <button 
@@ -117,23 +120,23 @@ export default function Profile({ onLogout }: { onLogout: () => void }) {
                   setIsEditingName(false);
                   saveToStorage('civic_user_name', userName);
                 }}
-                className="text-[9px] uppercase tracking-[0.2em] text-white/20 font-bold hover:text-white transition-colors"
+                className="text-[9px] uppercase tracking-[0.2em] text-on-surface/20 font-bold hover:text-on-surface transition-colors"
               >
                 {t('save')}
               </button>
             </div>
           ) : (
             <div className="flex items-center justify-center gap-4 group/name">
-              <h1 className="text-5xl font-serif text-white tracking-tight">{userName}</h1>
+              <h1 className="text-5xl font-serif text-on-surface tracking-tight">{userName}</h1>
               <button 
                 onClick={() => setIsEditingName(true)}
-                className="opacity-0 group-hover/name:opacity-100 transition-all p-2 hover:bg-white/10 rounded-full"
+                className="opacity-0 group-hover/name:opacity-100 transition-all p-2 hover:bg-on-surface/10 rounded-full"
               >
-                <Edit2 className="w-4 h-4 text-white/40" />
+                <Edit2 className="w-4 h-4 text-on-surface/40" />
               </button>
             </div>
           )}
-          <div className="inline-flex items-center gap-2 text-white/30">
+          <div className="inline-flex items-center gap-2 text-on-surface/30">
             <Verified className="w-4 h-4" />
             <span className="text-[10px] font-bold uppercase tracking-[0.3em]">{t('verified')}</span>
           </div>
@@ -180,10 +183,57 @@ export default function Profile({ onLogout }: { onLogout: () => void }) {
           )}
         </AnimatePresence>
       </section>
+      
+      {/* Theme Selection */}
+      <section className="bg-surface-container border border-white/5 rounded-sm overflow-hidden shadow-2xl">
+        <MenuItem 
+          icon={Palette} 
+          label={t('theme' as any)} 
+          active={showTheme}
+          onClick={() => setShowTheme(!showTheme)}
+        />
+        <AnimatePresence>
+          {showTheme && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden bg-white/[0.01] border-b border-white/5"
+            >
+              <div className="p-4 grid grid-cols-2 gap-4">
+                <button
+                  onClick={() => theme === 'dark' && toggleTheme()}
+                  className={cn(
+                    "py-5 px-4 rounded-sm border transition-all flex flex-col items-center gap-4",
+                    theme === 'light' 
+                      ? "bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.2)]" 
+                      : "bg-transparent text-white/40 border-white/10 hover:border-white/40 hover:text-white"
+                  )}
+                >
+                  <Sun className="w-6 h-6" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em]">{t('light' as any)}</span>
+                </button>
+                <button
+                  onClick={() => theme === 'light' && toggleTheme()}
+                  className={cn(
+                    "py-5 px-4 rounded-sm border transition-all flex flex-col items-center gap-4",
+                    theme === 'dark' 
+                      ? "bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.2)]" 
+                      : "bg-transparent text-white/40 border-white/10 hover:border-white/40 hover:text-white"
+                  )}
+                >
+                  <Moon className="w-6 h-6" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em]">{t('dark' as any)}</span>
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </section>
 
       {/* Account Statistics */}
       <section className="space-y-6">
-        <h2 className="text-[10px] font-bold text-white/30 uppercase tracking-[0.4em] px-1">{t('recent_activity')}</h2>
+        <h2 className="text-[10px] font-bold text-on-surface/30 uppercase tracking-[0.4em] px-1">{t('recent_activity')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <StatCard icon={FileText} label="Reports Filed" value="12" color="blue" />
           <StatCard icon={CheckCircle} label="Issues Resolved" value="08" color="emerald" />
@@ -238,7 +288,7 @@ export default function Profile({ onLogout }: { onLogout: () => void }) {
                       editing={isEditingIdentity}
                     />
                   </div>
-                  <div className="flex justify-end pt-4 border-t border-white/5">
+                  <div className="flex justify-end pt-4 border-t border-on-surface/5">
                     <button 
                       onClick={() => {
                         if (isEditingIdentity) {
@@ -246,7 +296,7 @@ export default function Profile({ onLogout }: { onLogout: () => void }) {
                         }
                         setIsEditingIdentity(!isEditingIdentity);
                       }}
-                      className="px-6 py-2 border border-white/20 rounded-sm text-[9px] font-bold uppercase tracking-widest hover:bg-white/10 transition-all text-white/60 hover:text-white"
+                      className="px-6 py-2 border border-on-surface/20 rounded-sm text-[9px] font-bold uppercase tracking-widest hover:bg-on-surface/10 transition-all text-on-surface/60 hover:text-on-surface"
                     >
                       {isEditingIdentity ? t('save') : t('edit')}
                     </button>
@@ -425,15 +475,15 @@ export default function Profile({ onLogout }: { onLogout: () => void }) {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-sm bg-surface-container border border-white/10 p-8 rounded-sm shadow-[0_0_50px_rgba(0,0,0,0.5)] space-y-8"
+              className="relative w-full max-w-sm bg-surface-container border border-on-surface/10 p-8 rounded-sm shadow-[0_0_50px_rgba(0,0,0,0.5)] space-y-8"
             >
               <div className="space-y-4 text-center">
                 <div className="w-16 h-16 rounded-full border border-error/20 bg-error/5 flex items-center justify-center mx-auto">
                   <LogOut className="w-6 h-6 text-error" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-lg font-serif text-white tracking-tight uppercase">Termination Protocol</h3>
-                  <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest leading-loose">
+                  <h3 className="text-lg font-serif text-on-surface tracking-tight uppercase">Termination Protocol</h3>
+                  <p className="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest leading-loose">
                     {t('logout_confirm' as any)}
                   </p>
                 </div>
@@ -442,7 +492,7 @@ export default function Profile({ onLogout }: { onLogout: () => void }) {
               <div className="grid grid-cols-2 gap-4">
                 <button 
                   onClick={() => setShowLogoutModal(false)}
-                  className="py-4 border border-white/10 rounded-sm text-[9px] font-bold text-white/40 uppercase tracking-[0.3em] hover:bg-white/5 hover:text-white transition-all"
+                  className="py-4 border border-on-surface/10 rounded-sm text-[9px] font-bold text-on-surface/40 uppercase tracking-[0.3em] hover:bg-on-surface/5 hover:text-on-surface transition-all"
                 >
                   Abstain
                 </button>
@@ -486,19 +536,19 @@ function LanguageButton({ lang, current, onClick, label }: any) {
 
 function EditableIdentityField({ icon: Icon, label, value, onChange, editing }: any) {
   return (
-    <div className="space-y-3 border-l border-white/10 pl-6">
-      <span className="text-[9px] font-bold text-white/20 uppercase tracking-[0.2em]">{label}</span>
+    <div className="space-y-3 border-l border-on-surface/10 pl-6">
+      <span className="text-[9px] font-bold text-on-surface/20 uppercase tracking-[0.2em]">{label}</span>
       <div className="flex items-center gap-3">
-        <Icon className="w-3 h-3 text-white/40" />
+        <Icon className="w-3 h-3 text-on-surface/40" />
         {editing ? (
           <input 
             type="text" 
             value={value} 
             onChange={(e) => onChange(e.target.value)}
-            className="bg-black/40 border border-white/20 rounded-sm text-xs font-bold text-white tracking-widest px-2 py-1 focus:border-white/40 outline-none w-full"
+            className="bg-on-surface/5 border border-on-surface/20 rounded-sm text-xs font-bold text-on-surface tracking-widest px-2 py-1 focus:border-on-surface/40 outline-none w-full"
           />
         ) : (
-          <span className="text-xs font-bold text-white/80 tracking-widest">{value}</span>
+          <span className="text-xs font-bold text-on-surface/80 tracking-widest">{value}</span>
         )}
       </div>
     </div>
@@ -507,11 +557,11 @@ function EditableIdentityField({ icon: Icon, label, value, onChange, editing }: 
 
 function IdentityField({ icon: Icon, label, value }: any) {
   return (
-    <div className="space-y-2 border-l border-white/10 pl-6">
-      <span className="text-[9px] font-bold text-white/20 uppercase tracking-[0.2em]">{label}</span>
+    <div className="space-y-2 border-l border-on-surface/10 pl-6">
+      <span className="text-[9px] font-bold text-on-surface/20 uppercase tracking-[0.2em]">{label}</span>
       <div className="flex items-center gap-3">
-        <Icon className="w-3 h-3 text-white/40" />
-        <span className="text-xs font-bold text-white/80 tracking-widest">{value}</span>
+        <Icon className="w-3 h-3 text-on-surface/40" />
+        <span className="text-xs font-bold text-on-surface/80 tracking-widest">{value}</span>
       </div>
     </div>
   );
@@ -523,16 +573,16 @@ function ToggleSetting({ label, active, onToggle }: { label: string; active: boo
       onClick={onToggle}
       className="w-full flex items-center justify-between group"
     >
-      <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest group-hover:text-white transition-colors">{label}</span>
+      <span className="text-[10px] font-bold text-on-surface/40 uppercase tracking-widest group-hover:text-on-surface transition-colors">{label}</span>
       <div className={cn(
         "w-10 h-5 rounded-full border transition-all relative p-1",
-        active ? "bg-emerald-500/20 border-emerald-500" : "bg-white/5 border-white/10"
+        active ? "bg-emerald-500/20 border-emerald-500" : "bg-on-surface/5 border-on-surface/10"
       )}>
         <motion.div 
           animate={{ x: active ? 20 : 0 }}
           className={cn(
             "w-2.5 h-2.5 rounded-full transition-colors",
-            active ? "bg-emerald-500" : "bg-white/20"
+            active ? "bg-emerald-500" : "bg-on-surface/20"
           )}
         />
       </div>
@@ -542,13 +592,13 @@ function ToggleSetting({ label, active, onToggle }: { label: string; active: boo
 
 function StatCard({ icon: Icon, label, value, color }: any) {
   return (
-    <div className="bg-surface-container border border-white/5 p-8 rounded-sm flex items-center gap-8 shadow-2xl group hover:bg-surface-container-high transition-colors">
-      <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center text-white/20 group-hover:text-white transition-all shadow-xl">
+    <div className="bg-surface-container border border-on-surface/5 p-8 rounded-sm flex items-center gap-8 shadow-2xl group hover:bg-surface-container-high transition-colors">
+      <div className="w-16 h-16 rounded-full border border-on-surface/10 flex items-center justify-center text-on-surface/20 group-hover:text-on-surface transition-all shadow-xl">
         <Icon className="w-6 h-6" />
       </div>
       <div>
-        <p className="text-[9px] font-bold text-white/30 uppercase tracking-[0.3em] leading-none">{label}</p>
-        <p className="text-4xl font-serif text-white mt-3">{value}</p>
+        <p className="text-[9px] font-bold text-on-surface/30 uppercase tracking-[0.3em] leading-none">{label}</p>
+        <p className="text-4xl font-serif text-on-surface mt-3">{value}</p>
       </div>
     </div>
   );
@@ -559,26 +609,26 @@ function MenuItem({ icon: Icon, label, last, active, onClick }: any) {
     <button 
       onClick={onClick}
       className={cn(
-        "w-full px-8 py-5 flex items-center justify-between hover:bg-white/[0.02] transition-colors group text-left",
-        !last && "border-b border-white/5",
-        active && "bg-white/[0.02]"
+        "w-full px-8 py-5 flex items-center justify-between hover:bg-on-surface/[0.02] transition-colors group text-left",
+        !last && "border-b border-on-surface/5",
+        active && "bg-on-surface/[0.02]"
       )}
     >
       <div className="flex items-center gap-6">
         <div className={cn(
           "w-10 h-10 rounded-full border flex items-center justify-center transition-colors",
-          active ? "border-white text-white" : "border-white/5 text-white/20 group-hover:text-white"
+          active ? "border-on-surface text-on-surface" : "border-on-surface/5 text-on-surface/20 group-hover:text-on-surface"
         )}>
           <Icon className="w-4 h-4" />
         </div>
         <span className={cn(
           "text-[11px] font-bold uppercase tracking-[0.2em] transition-colors",
-          active ? "text-white" : "text-white/60 group-hover:text-white"
+          active ? "text-on-surface" : "text-on-surface/60 group-hover:text-on-surface"
         )}>{label}</span>
       </div>
       <ChevronRight className={cn(
-        "w-4 h-4 text-white/10 transition-all",
-        active ? "rotate-90 text-white" : "opacity-40 group-hover:opacity-100 group-hover:translate-x-1"
+        "w-4 h-4 text-on-surface/10 transition-all",
+        active ? "rotate-90 text-on-surface" : "opacity-40 group-hover:opacity-100 group-hover:translate-x-1"
       )} />
     </button>
   );

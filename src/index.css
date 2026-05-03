@@ -1,10 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import "tailwindcss";
 
-@theme {
-  --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Playfair Display", serif;
+:root {
+  --color-surface: #ffffff;
+  --color-surface-dim: #f5f5f5;
+  --color-surface-bright: #fafafa;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f8f9fa;
+  --color-surface-container: #f0f2f5;
+  --color-surface-container-high: #e9ecef;
+  --color-surface-container-highest: #dee2e6;
   
+  --color-on-surface: #0a0a0a;
+  --color-on-surface-variant: #404040;
+  --color-inverse-surface: #1a1c1e;
+  --color-inverse-on-surface: #f0f1f2;
+  
+  --color-outline: rgba(0, 0, 0, 0.1);
+  --color-outline-variant: rgba(0, 0, 0, 0.05);
+  
+  --color-primary: #000000;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #e5e5e5;
+  --color-on-primary-container: #000000;
+  
+  --color-secondary: #525252;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #f3f4f6;
+  --color-on-secondary-container: #1a1a1a;
+  
+  --color-error: #dc2626;
+  --color-on-error: #ffffff;
+}
+
+.dark {
   --color-surface: #0a0a0a;
   --color-surface-dim: #1a1a1a;
   --color-surface-bright: #1f1f1f;
@@ -27,20 +56,49 @@
   --color-primary-container: #333333;
   --color-on-primary-container: #ffffff;
   
-  --color-inverse-primary: #acc7ff;
   --color-secondary: #737373;
   --color-on-secondary: #ffffff;
   --color-secondary-container: #262626;
   --color-on-secondary-container: #e5e5e5;
-  --color-tertiary: #36444c;
-  --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #4d5b64;
-  --color-on-tertiary-container: #c3d2dd;
+  
   --color-error: #ff4d4d;
-  --color-on-error: #ffffff;
-  --color-error-container: #451a1a;
-  --color-on-error-container: #ffdad6;
 }
+
+@theme {
+  --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", serif;
+  
+  --color-surface: var(--color-surface);
+  --color-surface-dim: var(--color-surface-dim);
+  --color-surface-bright: var(--color-surface-bright);
+  --color-surface-container-lowest: var(--color-surface-container-lowest);
+  --color-surface-container-low: var(--color-surface-container-low);
+  --color-surface-container: var(--color-surface-container);
+  --color-surface-container-high: var(--color-surface-container-high);
+  --color-surface-container-highest: var(--color-surface-container-highest);
+  
+  --color-on-surface: var(--color-on-surface);
+  --color-on-surface-variant: var(--color-on-surface-variant);
+  --color-inverse-surface: var(--color-inverse-surface);
+  --color-inverse-on-surface: var(--color-inverse-on-surface);
+  
+  --color-outline: var(--color-outline);
+  --color-outline-variant: var(--color-outline-variant);
+  
+  --color-primary: var(--color-primary);
+  --color-on-primary: var(--color-on-primary);
+  --color-primary-container: var(--color-primary-container);
+  --color-on-primary-container: var(--color-on-primary-container);
+  
+  --color-secondary: var(--color-secondary);
+  --color-on-secondary: var(--color-on-secondary);
+  --color-secondary-container: var(--color-secondary-container);
+  --color-on-secondary-container: var(--color-on-secondary-container);
+  
+  --color-error: var(--color-error);
+  --color-on-error: var(--color-on-error);
+}
+
 
 @layer base {
   body {

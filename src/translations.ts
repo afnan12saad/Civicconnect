@@ -58,6 +58,9 @@ export const translations = {
     support_status: "Nexus Status: Online",
     logout_confirm: "Are you sure you want to terminate this session?",
     logout_success: "Session terminated successfully.",
+    theme: "Interface Theme",
+    light: "Optical Mode",
+    dark: "Subsurface Mode",
   },
   hi: {
     dashboard: "डैशबोर्ड",
@@ -111,6 +114,9 @@ export const translations = {
     support_status: "नेक्सस स्थिति: ऑनलाइन",
     logout_confirm: "क्या आप वाकई इस सत्र को समाप्त करना चाहते हैं?",
     logout_success: "सत्र सफलतापूर्वक समाप्त हो गया।",
+    theme: "इंटरफेस थीम",
+    light: "ऑप्टिकल मोड",
+    dark: "सबसरफेस मोड",
   },
   kn: {
     dashboard: "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
@@ -164,6 +170,9 @@ export const translations = {
     support_status: "ನೆಕ್ಸಸ್ ಸ್ಥಿತಿ: ಆನ್ಲೈನ್",
     logout_confirm: "ನೀವು ನಿಜವಾಗಿಯೂ ಈ ಸೆಷನ್ ಅನ್ನು ಕೊನೆಗೊಳಿಸಲು ಬಯಸುವಿರಾ?",
     logout_success: "ಸೆಷನ್ ಯಶಸ್ವಿಯಾಗಿ ಕೊನೆಗೊಂಡಿದೆ.",
+    theme: "ಇಂಟರ್ಫೇಸ್ ಥೀಮ್",
+    light: "ಆಪ್ಟಿಕಲ್ ಮೋಡ್",
+    dark: "ಸಬ್‌ಸರ್ಫೇಸ್ ಮೋಡ್",
   }
 };
 

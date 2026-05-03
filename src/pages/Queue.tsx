@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Filter, Droplets, Lightbulb, TreePine, MapPinned, MoreHorizontal, ChevronRight, Plus, Trash2 } from 'lucide-react';
+import { Filter, Droplets, Lightbulb, TreePine, MapPinned, MoreHorizontal, ChevronRight, Plus, Trash2, AlertTriangle } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useState } from 'react';
-import { Urgency, ReportStatus } from '@/src/types';
+import { useState, useEffect } from 'react';
+import { Urgency } from '@/src/types';
 import { cn } from '@/src/components/Layout';
 import { Link } from 'react-router-dom';
 
-const REPORTS = [
+const INITIAL_REPORTS = [
   {
     id: 'REP-8291',
     title: 'Burst main water pipe on Elm St',
@@ -18,7 +18,7 @@ const REPORTS = [
     category: 'Water Works',
     urgency: Urgency.HIGH,
     time: '2m ago',
-    icon: Droplets,
+    iconName: 'Droplets',
     color: 'red'
   },
   {
@@ -28,7 +28,7 @@ const REPORTS = [
     category: 'Public Safety',
     urgency: Urgency.MEDIUM,
     time: '15m ago',
-    icon: Lightbulb,
+    iconName: 'Lightbulb',
     color: 'amber'
   },
   {
@@ -38,30 +38,42 @@ const REPORTS = [
     category: 'Environment',
     urgency: Urgency.LOW,
     time: '1h ago',
-    icon: TreePine,
+    iconName: 'TreePine',
     color: 'green'
-  },
-  {
-    id: 'REP-8280',
-    title: 'Illegal dumping on North Ridge',
-    description: 'Construction debris has been left on the sidewalk for over 48 hours, blocking pedestrian access.',
-    category: 'Sanitation',
-    urgency: Urgency.MEDIUM,
-    time: '3h ago',
-    icon: Trash2,
-    color: 'amber',
-    hasImage: true
   }
 ];
 
+const ICON_MAP: Record<string, any> = {
+  'Droplets': Droplets,
+  'Lightbulb': Lightbulb,
+  'TreePine': TreePine,
+  'MapPinned': MapPinned,
+  'Trash2': Trash2,
+  'AlertTriangle': AlertTriangle,
+  'Water Works': Droplets,
+  'Public Safety': ShieldCheckIcon,
+  'Road Maintenance': AlertTriangle,
+  'Sanitation': Trash2,
+  'Environment': TreePine
+};
+
+// Helper for dynamic icons
+function ShieldCheckIcon(props: any) { return <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>; }
+
 export default function Queue() {
   const [filter, setFilter] = useState('All');
+  const [reports, setReports] = useState<any[]>([]);
 
-  const filteredReports = REPORTS.filter(report => {
+  useEffect(() => {
+    const localReports = JSON.parse(localStorage.getItem('civic_reports') || '[]');
+    setReports([...localReports, ...INITIAL_REPORTS]);
+  }, []);
+
+  const filteredReports = reports.filter(report => {
     if (filter === 'All') return true;
     if (filter === 'Urgency: High') return report.urgency === Urgency.HIGH;
-    if (filter === 'Sanitation') return report.category === 'Sanitation';
-    if (filter === 'Roads & Infrastructure') return report.category === 'Water Works'; // Example mapping
+    if (filter === 'Sanitation') return report.category === 'Sanitation' || report.category === 'Waste Management';
+    if (filter === 'Roads & Infrastructure') return report.category === 'Water Works' || report.category === 'Road Maintenance';
     return true;
   });
 
@@ -115,7 +127,9 @@ function FilterButton({ label, icon: Icon, active, onClick }: { label: string, i
   );
 }
 
-function ReportCard({ id, title, description, category, urgency, time, icon: Icon, color, hasImage }: any) {
+function ReportCard({ id, title, description, category, urgency, time, iconName, color, image }: any) {
+  const Icon = ICON_MAP[iconName] || ICON_MAP[category] || AlertTriangle;
+  
   const urgencyColors: Record<string, string> = {
     red: "border-error text-error",
     amber: "border-amber-500/50 text-amber-500",
@@ -126,7 +140,7 @@ function ReportCard({ id, title, description, category, urgency, time, icon: Ico
     <div className="bg-surface-container border border-white/10 p-6 rounded-sm hover:bg-surface-container-high transition-all group cursor-pointer shadow-xl">
       <div className="flex justify-between items-start mb-6">
         <div className="flex items-center gap-3">
-          <span className={cn("px-3 py-1 border rounded-full text-[10px] font-bold uppercase tracking-[0.2em]", urgencyColors[color])}>
+          <span className={cn("px-3 py-1 border rounded-full text-[10px] font-bold uppercase tracking-[0.2em]", urgencyColors[color] || urgencyColors.amber)}>
             {urgency} Priority
           </span>
           <span className="text-white/20 text-[10px] font-bold uppercase tracking-widest leading-none">{id}</span>
@@ -136,12 +150,12 @@ function ReportCard({ id, title, description, category, urgency, time, icon: Ico
       
       <div className="flex gap-6 items-start mb-6">
         <div className="flex-1 space-y-2">
-          <h3 className="font-bold text-white text-sm uppercase tracking-widest group-hover:text-primary transition-colors">{title}</h3>
-          <p className="text-xs text-white/40 leading-relaxed max-w-md">{description}</p>
+          <h3 className="font-bold text-white text-sm uppercase tracking-widest group-hover:text-primary transition-colors line-clamp-1">{title}</h3>
+          <p className="text-xs text-white/40 leading-relaxed max-w-md line-clamp-2">{description}</p>
         </div>
-        {hasImage && (
+        {image && (
           <div className="w-20 h-20 rounded-sm border border-white/10 overflow-hidden flex-shrink-0 grayscale group-hover:grayscale-0 transition-all duration-700">
-            <img src="https://images.unsplash.com/photo-1542362567-b05e50bd4a4b?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover" alt="Trash" />
+            <img src={image} className="w-full h-full object-cover" alt="Evidence" />
           </div>
         )}
       </div>

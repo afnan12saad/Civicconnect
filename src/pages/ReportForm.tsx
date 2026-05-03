@@ -9,11 +9,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/src/components/Layout';
 import { useLanguage } from '../LanguageContext';
 import { useNotifications } from '../NotificationContext';
+import { Urgency, ReportStatus } from '../types';
 
 export default function ReportForm() {
   const { t, language } = useLanguage();
   const { addNotification } = useNotifications();
   const [description, setDescription] = useState("There's a large pothole on Oak Street near the primary school. It's causing cars to swerve and seems quite deep.");
+  const [category, setCategory] = useState("Road Maintenance");
+  const [urgency, setUrgency] = useState(Urgency.MEDIUM_HIGH);
+  const [location, setLocation] = useState("342 OAK ST, PRIMARY DISTRICT 4");
+  
   const [isListening, setIsListening] = useState(false);
   const [micError, setMicError] = useState(false);
   const [isTokenAcquired, setIsTokenAcquired] = useState(false);
@@ -50,6 +55,25 @@ export default function ReportForm() {
     // Simulate ledger delay
     await new Promise(resolve => setTimeout(resolve, 2000));
     
+    // Construct new report
+    const newReport = {
+      id: `REP-${Math.floor(Math.random() * 9000 + 1000)}`,
+      title: description.split('.')[0].slice(0, 50) + (description.split('.')[0].length > 50 ? '...' : ''),
+      description: description,
+      category: category,
+      urgency: urgency,
+      status: ReportStatus.PENDING,
+      location: location,
+      time: 'Just now',
+      timestamp: new Date().toISOString(),
+      image: reportImage,
+      iconName: category // Use category mapping
+    };
+
+    // Save to localStorage
+    const existing = JSON.parse(localStorage.getItem('civic_reports') || '[]');
+    localStorage.setItem('civic_reports', JSON.stringify([newReport, ...existing]));
+
     setIsSaving(false);
     setIsSubmitted(true);
     
@@ -311,7 +335,8 @@ export default function ReportForm() {
                   type="text" 
                   className="w-full bg-black/40 border border-white/10 rounded-sm py-4 pl-12 pr-4 text-xs font-bold text-white tracking-widest focus:border-white/30 outline-none"
                   placeholder="SEARCH ON GOOGLE MAPS..."
-                  defaultValue="342 OAK ST, PRIMARY DISTRICT 4"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
                  />
                </div>
                <button 
@@ -326,20 +351,30 @@ export default function ReportForm() {
            <div className="grid grid-cols-2 gap-6 relative z-10">
              <div className="space-y-2">
                <span className="text-[9px] uppercase tracking-[0.2em] text-white/30 font-bold leading-none">AI Classification</span>
-               <select className="w-full bg-surface-container border border-white/5 rounded-sm p-3 text-[10px] font-bold text-white/80 uppercase tracking-widest outline-none focus:border-white/20 transition-all cursor-pointer appearance-none">
-                 <option>Road Maintenance</option>
-                 <option>Sanitation</option>
-                 <option>Water Works</option>
-                 <option>Public Safety</option>
+               <select 
+                 value={category}
+                 onChange={(e) => setCategory(e.target.value)}
+                 className="w-full bg-surface-container border border-white/5 rounded-sm p-3 text-[10px] font-bold text-white/80 uppercase tracking-widest outline-none focus:border-white/20 transition-all cursor-pointer appearance-none"
+               >
+                 <option value="Road Maintenance">Road Maintenance</option>
+                 <option value="Sanitation">Sanitation</option>
+                 <option value="Water Works">Water Works</option>
+                 <option value="Public Safety">Public Safety</option>
+                 <option value="Environment">Environment</option>
                </select>
              </div>
              <div className="space-y-2">
                <span className="text-[9px] uppercase tracking-[0.2em] text-white/30 font-bold leading-none">Urgency Protocol</span>
-               <select className="w-full bg-surface-container border border-white/5 rounded-sm p-3 text-[10px] font-bold text-amber-500 uppercase tracking-widest outline-none focus:border-white/20 transition-all cursor-pointer appearance-none">
-                 <option>Medium-High</option>
-                 <option>Critical</option>
-                 <option>Emergency</option>
-                 <option>Standard</option>
+               <select 
+                 value={urgency}
+                 onChange={(e) => setUrgency(e.target.value as Urgency)}
+                 className="w-full bg-surface-container border border-white/5 rounded-sm p-3 text-[10px] font-bold text-amber-500 uppercase tracking-widest outline-none focus:border-white/20 transition-all cursor-pointer appearance-none"
+               >
+                 <option value={Urgency.LOW}>Standard (Low)</option>
+                 <option value={Urgency.MEDIUM}>Medium</option>
+                 <option value={Urgency.MEDIUM_HIGH}>Medium-High</option>
+                 <option value={Urgency.HIGH}>High</option>
+                 <option value={Urgency.CRITICAL}>Critical / Emergency</option>
                </select>
              </div>
            </div>

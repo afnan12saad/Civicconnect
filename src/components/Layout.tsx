@@ -40,10 +40,10 @@ export default function Layout() {
       {/* Top App Bar */}
       <header className="fixed top-0 left-0 w-full h-16 bg-surface border-b border-outline z-[60] flex items-center justify-between px-6">
         <div className="flex items-center gap-4">
-          <div className="w-8 h-8 border border-white/40 rounded-full flex items-center justify-center">
-            <span className="text-[10px] font-bold text-white">CC</span>
+          <div className="w-8 h-8 border border-on-surface/40 rounded-full flex items-center justify-center">
+            <span className="text-[10px] font-bold text-on-surface">CC</span>
           </div>
-          <h1 className="text-sm font-bold uppercase tracking-[0.2em] text-white">CivicConnect</h1>
+          <h1 className="text-sm font-bold uppercase tracking-[0.2em] text-on-surface">CivicConnect</h1>
         </div>
         
         <div className="relative" ref={dropdownRef}>
@@ -51,12 +51,12 @@ export default function Layout() {
             onClick={() => setShowNotifications(!showNotifications)}
             className={cn(
               "p-2 rounded-full transition-all relative z-[70]",
-              showNotifications ? "bg-white/10" : "hover:bg-white/5"
+              showNotifications ? "bg-on-surface/10" : "hover:bg-on-surface/5"
             )}
           >
-            <Bell className={cn("w-5 h-5 transition-colors", unreadCount > 0 ? "text-white" : "text-white/40")} />
+            <Bell className={cn("w-5 h-5 transition-colors", unreadCount > 0 ? "text-on-surface" : "text-on-surface/40")} />
             {unreadCount > 0 && (
-              <span className="absolute top-2 right-2 w-3 h-3 bg-error text-[7px] font-bold text-white rounded-full flex items-center justify-center ring-2 ring-surface">
+              <span className="absolute top-2 right-2 w-3 h-3 bg-error text-[7px] font-bold text-on-error rounded-full flex items-center justify-center ring-2 ring-surface">
                 {unreadCount}
               </span>
             )}
@@ -70,12 +70,12 @@ export default function Layout() {
                 exit={{ opacity: 0, scale: 0.95, y: 10 }}
                 className="absolute right-0 mt-4 w-80 bg-surface-container border border-white/10 rounded-sm shadow-2xl overflow-hidden z-[60]"
               >
-                <div className="p-4 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
-                  <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">Civic Alerts</h3>
+                <div className="p-4 border-b border-on-surface/5 flex justify-between items-center bg-on-surface/[0.02]">
+                  <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface/60">Civic Alerts</h3>
                   {unreadCount > 0 && (
                     <button 
                       onClick={markAllAsRead}
-                      className="text-[9px] font-bold text-white/30 hover:text-white uppercase tracking-widest transition-colors"
+                      className="text-[9px] font-bold text-on-surface/30 hover:text-on-surface uppercase tracking-widest transition-colors"
                     >
                       Clear All
                     </button>
@@ -138,7 +138,7 @@ function NavButton({ to, icon: Icon, label }: NavButtonProps) {
       className={({ isActive }) =>
         cn(
           "flex flex-col items-center justify-center w-full py-2 gap-1.5 transition-all duration-300 rounded-sm relative",
-          isActive ? "text-white" : "text-white/30 hover:text-white/60"
+          isActive ? "text-on-surface" : "text-on-surface/30 hover:text-on-surface/60"
         )
       }
     >
@@ -147,7 +147,7 @@ function NavButton({ to, icon: Icon, label }: NavButtonProps) {
           <Icon className="w-5 h-5" />
           <span className="text-[10px] font-bold uppercase tracking-[0.1em]">{label}</span>
           <div className={cn(
-            "absolute -bottom-4 w-8 h-px bg-white transition-opacity duration-300",
+            "absolute -bottom-4 w-8 h-px bg-on-surface transition-opacity duration-300",
             isActive ? "opacity-100" : "opacity-0"
           )} />
         </>
@@ -173,7 +173,7 @@ function NotificationItem({ notification, onRead, onRemove }: {
   return (
     <div className={cn(
       "p-4 transition-colors group relative",
-      notification.read ? "bg-transparent opacity-60" : "bg-white/[0.02]"
+      notification.read ? "bg-transparent opacity-60" : "bg-on-surface/[0.02]"
     )}>
       <div className="flex gap-4">
         <div className={cn("mt-1", colorClass)}>
@@ -181,20 +181,20 @@ function NotificationItem({ notification, onRead, onRemove }: {
         </div>
         <div className="flex-1 space-y-1">
           <div className="flex justify-between items-start">
-            <h4 className="text-[11px] font-bold text-white uppercase tracking-wider">{notification.title}</h4>
-            <span className="text-[8px] font-bold text-white/20 uppercase">{notification.time}</span>
+            <h4 className="text-[11px] font-bold text-on-surface uppercase tracking-wider">{notification.title}</h4>
+            <span className="text-[8px] font-bold text-on-surface/20 uppercase">{notification.time}</span>
           </div>
-          <p className="text-[10px] text-white/40 leading-relaxed">{notification.message}</p>
+          <p className="text-[10px] text-on-surface/40 leading-relaxed">{notification.message}</p>
         </div>
       </div>
       
       <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
         {!notification.read && (
-          <button onClick={onRead} className="p-1 hover:bg-white/10 rounded-sm text-white/40 hover:text-white">
+          <button onClick={onRead} className="p-1 hover:bg-on-surface/10 rounded-sm text-on-surface/40 hover:text-on-surface">
             <Check className="w-3 h-3" />
           </button>
         )}
-        <button onClick={onRemove} className="p-1 hover:bg-white/10 rounded-sm text-white/40 hover:text-white">
+        <button onClick={onRemove} className="p-1 hover:bg-on-surface/10 rounded-sm text-on-surface/40 hover:text-on-surface">
           <Trash2 className="w-3 h-3" />
         </button>
       </div>
