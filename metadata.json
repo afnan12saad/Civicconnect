@@ -1,0 +1,14 @@
+{
+  "name": "CivicConnect",
+  "description": "A modern civic reporting and administration platform for citizens and city officials.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "AI-powered report categorization",
+    "Real-time city metrics dashboard",
+    "Structured incident management"
+  ]
+}

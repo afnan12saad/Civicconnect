@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", serif;
+  
+  --color-surface: #0a0a0a;
+  --color-surface-dim: #1a1a1a;
+  --color-surface-bright: #1f1f1f;
+  --color-surface-container-lowest: #000000;
+  --color-surface-container-low: #111111;
+  --color-surface-container: #151515;
+  --color-surface-container-high: #1a1a1a;
+  --color-surface-container-highest: #222222;
+  
+  --color-on-surface: #e5e5e5;
+  --color-on-surface-variant: #a3a3a3;
+  --color-inverse-surface: #f0f1f2;
+  --color-inverse-on-surface: #191c1d;
+  
+  --color-outline: rgba(255, 255, 255, 0.1);
+  --color-outline-variant: rgba(255, 255, 255, 0.05);
+  
+  --color-primary: #ffffff;
+  --color-on-primary: #000000;
+  --color-primary-container: #333333;
+  --color-on-primary-container: #ffffff;
+  
+  --color-inverse-primary: #acc7ff;
+  --color-secondary: #737373;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #262626;
+  --color-on-secondary-container: #e5e5e5;
+  --color-tertiary: #36444c;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #4d5b64;
+  --color-on-tertiary-container: #c3d2dd;
+  --color-error: #ff4d4d;
+  --color-on-error: #ffffff;
+  --color-error-container: #451a1a;
+  --color-on-error-container: #ffdad6;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-on-surface font-sans antialiased;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
